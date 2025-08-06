@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Hamid Yarali">
+    <meta name="description" content="404 Not Found - EagleSpace">
+    <title>EagleSpace - 404 Reality Collapsing</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ff0000'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 14v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1h-6v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z'/%3E%3C/svg%3E">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;700;900&family=Noto+Serif+SC:wght@400;700&family=Roboto:wght@300;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            background-color: #000000;
+            color: #fff;
+            overflow: hidden;
+            font-family: 'Vazirmatn', 'Noto Serif SC', 'Roboto', sans-serif;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        body.light-theme {
+            background-color: #e6e6fa;
+            color: #000;
+        }
+        #webgl-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            outline: none;
+        }
+        .overlay-content {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            pointer-events: none;
+            z-index: 10;
+        }
+        .overlay-content h2, .overlay-content a {
+            pointer-events: auto;
+        }
+        .glow-button {
+            border: 2px solid #ff0000;
+            color: #ff0000;
+            text-shadow: 0 0 10px #ff0000;
+            transition: all 0.3s ease;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            font-weight: bold;
+        }
+        .light-theme .glow-button {
+            border: 2px solid #0000ff;
+            color: #0000ff;
+            text-shadow: 0 0 10px #0000ff;
+        }
+        .glow-button:hover {
+            background-color: #ff0000;
+            color: #000;
+            box-shadow: 0 0 20px #ff0000, 0 0 30px #ff0000;
+        }
+        .light-theme .glow-button:hover {
+            background-color: #0000ff;
+            color: #fff;
+            box-shadow: 0 0 20px #0000ff, 0 0 30px #0000ff;
+        }
+        .lang-switcher button {
+            transition: all 0.3s ease;
+        }
+        .lang-switcher button:hover {
+            background-color: #ff0000;
+            transform: scale(1.05);
+        }
+        footer a:hover {
+            color: #ff0000;
+            transform: scale(1.05);
+        }
+        .light-theme footer a:hover {
+            color: #0000ff;
+        }
+    </style>
+</head>
+<body class="dark-theme">
+    <div id="webgl-container">
+        <canvas id="webgl-canvas"></canvas>
+    </div>
+    <div class="overlay-content p-6">
+        <div class="flex justify-between w-full max-w-md mb-4 lang-switcher">
+            <button onclick="changeLanguage('fa')" class="px-4 py-2 bg-blue-600 text-white rounded">فارسی</button>
+            <button onclick="changeLanguage('en')" class="px-4 py-2 bg-blue-600 text-white rounded">English</button>
+            <button onclick="changeLanguage('zh')" class="px-4 py-2 bg-blue-600 text-white rounded">中文</button>
+            <button onclick="toggleTheme()" class="px-4 py-2 bg-red-600 text-white rounded">Toggle Theme</button>
+        </div>
+        <div class="h-48 md:h-64"></div>
+        <h2 id="message" class="text-xl md:text-3xl font-bold" style="text-shadow: 0 0 10px rgba(255, 0, 0, 0.7);">
+            یک جای کار می‌لنگد...
+        </h2>
+        <p id="description" class="max-w-md mt-4 text-gray-300">
+            به نظر می‌رسد ساختار این صفحه دچار اختلال شده و در حال فروپاشی است.
+        </p>
+        <a href="/" class="glow-button mt-8">
+            فرار از این واقعیت
+        </a>
+    </div>
+    <footer class="text-center py-4 text-gray-400">
+        <p>Designed by <a href="https://github.com/HamidYaraliOfficial" class="text-blue-400 hover:text-red-400 transition">Hamid Yarali</a></p>
+        <p>Follow on <a href="https://www.instagram.com/hamidyaraliofficial?igsh=MWpxZjhhMHZuNnlpYQ==" class="text-blue-400 hover:text-red-400 transition">Instagram</a></p>
+    </footer>
+    <script async src="https://unpkg.com/es-module-shims@1.6.3/dist/es-module-shims.js"></script>
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://cdn.jsdelivr.net/npm/three@0.150.1/build/three.module.js",
+            "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.150.1/examples/jsm/"
+        }
+    }
+    </script>
+    <script type="module">
+        import * as THREE from 'three';
+        import { FontLoader } from 'three/addons/loaders/FontLoader.js';
+        import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
+        import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+        import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+        import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+
+        let scene, camera, renderer, composer;
+        let particles, textMesh;
+        const mouse = new THREE.Vector2(10000, 10000);
+        const interactionRadius = 80;
+
+        function init() {
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.z = 300;
+
+            const canvas = document.getElementById('webgl-canvas');
+            renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+            const renderScene = new RenderPass(scene, camera);
+            const bloomPass = new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1.5, 0.4, 0.85);
+            bloomPass.threshold = 0;
+            bloomPass.strength = 1.2;
+            bloomPass.radius = 0.5;
+            composer = new EffectComposer(renderer);
+            composer.addPass(renderScene);
+            composer.addPass(bloomPass);
+
+            const fontLoader = new FontLoader();
+            fontLoader.load('https://cdn.jsdelivr.net/npm/three@0.150.1/examples/fonts/helvetiker_bold.typeface.json', (font) => {
+                createText(font);
+            });
+
+            window.addEventListener('resize', onWindowResize);
+            window.addEventListener('mousemove', onMouseMove);
+        }
+
+        function createText(font) {
+            const text = '404';
+            const geometry = new TextGeometry(text, {
+                font: font,
+                size: 80,
+                height: 5,
+                curveSegments: 12,
+                bevelEnabled: true,
+                bevelThickness: 2,
+                bevelSize: 2,
+                bevelOffset: 0,
+                bevelSegments: 5
+            });
+            geometry.center();
+
+            const material = new THREE.PointsMaterial({
+                color: document.body.classList.contains('light-theme') ? 0x0000ff : 0xff0000,
+                size: 1.5,
+                blending: THREE.AdditiveBlending,
+                transparent: true,
+                opacity: 0.8
+            });
+
+            const sampling = 0.1;
+            const count = geometry.attributes.position.count;
+            const positions = [];
+            for (let i = 0; i < count; i += Math.ceil(1/sampling)) {
+                positions.push(geometry.attributes.position.getX(i), geometry.attributes.position.getY(i), geometry.attributes.position.getZ(i));
+            }
+
+            const particleGeometry = new THREE.BufferGeometry();
+            particleGeometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+            
+            particles = new THREE.Points(particleGeometry, material);
+            particles.geometry.attributes.position.original = particles.geometry.attributes.position.array.slice();
+            particles.geometry.attributes.position.random = new Float32Array(particles.geometry.attributes.position.count * 3);
+            for (let i = 0; i < particles.geometry.attributes.position.count; i++) {
+                particles.geometry.attributes.position.random[i*3] = (Math.random() - 0.5) * 2;
+                particles.geometry.attributes.position.random[i*3+1] = (Math.random() - 0.5) * 2;
+                particles.geometry.attributes.position.random[i*3+2] = (Math.random() - 0.5) * 2;
+            }
+
+            scene.add(particles);
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+
+            if (particles) {
+                const positions = particles.geometry.attributes.position.array;
+                const original = particles.geometry.attributes.position.original;
+                const random = particles.geometry.attributes.position.random;
+
+                for (let i = 0; i < particles.geometry.attributes.position.count; i++) {
+                    const ix = i * 3, iy = i * 3 + 1, iz = i * 3 + 2;
+                    const mouseDistance = new THREE.Vector2(
+                        original[ix] - mouse.x,
+                        original[iy] - mouse.y
+                    ).length();
+                    const forceFactor = Math.max(0, 1 - mouseDistance / interactionRadius);
+                    const targetX = original[ix] + random[ix] * forceFactor * 50;
+                    const targetY = original[iy] + random[iy] * forceFactor * 50;
+                    const targetZ = original[iz] + random[iz] * forceFactor * 50;
+                    positions[ix] += (targetX - positions[ix]) * 0.05;
+                    positions[iy] += (targetY - positions[iy]) * 0.05;
+                    positions[iz] += (targetZ - positions[iz]) * 0.05;
+                }
+                particles.geometry.attributes.position.needsUpdate = true;
+                particles.material.color.set(document.body.classList.contains('light-theme') ? 0x0000ff : 0xff0000);
+            }
+
+            composer.render();
+        }
+
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            composer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        function onMouseMove(event) {
+            const vec = new THREE.Vector3();
+            const pos = new THREE.Vector3();
+            vec.set(
+                (event.clientX / window.innerWidth) * 2 - 1,
+                - (event.clientY / window.innerHeight) * 2 + 1,
+                0.5
+            );
+            vec.unproject(camera);
+            vec.sub(camera.position).normalize();
+            const distance = -camera.position.z / vec.z;
+            pos.copy(camera.position).add(vec.multiplyScalar(distance));
+            mouse.x = pos.x;
+            mouse.y = pos.y;
+        }
+
+        const translations = {
+            fa: {
+                dir: 'rtl',
+                message: 'یک جای کار می‌لنگد...',
+                description: 'به نظر می‌رسد ساختار این صفحه دچار اختلال شده و در حال فروپاشی است.',
+                home: 'فرار از این واقعیت'
+            },
+            en: {
+                dir: 'ltr',
+                message: 'Something’s gone wrong...',
+                description: 'It seems the structure of this page is malfunctioning and collapsing.',
+                home: 'Escape this Reality'
+            },
+            zh: {
+                dir: 'ltr',
+                message: '出了点问题...',
+                description: '这个页面的结构似乎出现了故障，正在崩溃。',
+                home: '逃离这个现实'
+            }
+        };
+
+        function changeLanguage(lang) {
+            document.documentElement.lang = lang;
+            document.documentElement.dir = translations[lang].dir;
+            document.getElementById('message').textContent = translations[lang].message;
+            document.getElementById('description').textContent = translations[lang].description;
+            document.querySelector('a[href="/"]').textContent = translations[lang].home;
+        }
+
+        function toggleTheme() {
+            document.body.classList.toggle('light-theme');
+            document.body.classList.toggle('dark-theme');
+            const isLight = document.body.classList.contains('light-theme');
+            document.getElementById('message').style.textShadow = isLight ? '0 0 10px rgba(0, 0, 255, 0.7)' : '0 0 10px rgba(255, 0, 0, 0.7)';
+            document.getElementById('description').className = isLight ? 'max-w-md mt-4 text-gray-600' : 'max-w-md mt-4 text-gray-300';
+            if (particles) {
+                particles.material.color.set(isLight ? 0x0000ff : 0xff0000);
+            }
+        }
+
+        init();
+        animate();
+    </script>
+</body>
+</html>

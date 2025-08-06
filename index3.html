@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Hamid Yarali">
+    <meta name="description" content="404 Not Found - EagleSpace">
+    <title>EagleSpace - 404 System Disruption</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ff0000'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 14v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1h-6v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z'/%3E%3C/svg%3E">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;700;900&family=Noto+Serif+SC:wght@400;700&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Vazirmatn', 'Noto Serif SC', 'Roboto Mono', monospace;
+            background: #000;
+            overflow: hidden;
+            color: #0f0;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+        body.light-theme {
+            background: #e6e6fa;
+            color: #0000ff;
+        }
+        #matrix-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+        .scanline-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+            background: linear-gradient(
+                to bottom,
+                rgba(0,0,0,0) 0%,
+                rgba(0,0,0,0.4) 50%,
+                rgba(0,0,0,0) 100%
+            );
+            background-size: 100% 4px;
+            animation: scanline-anim 10s linear infinite;
+        }
+        @keyframes scanline-anim {
+            from { background-position: 0 0; }
+            to { background-position: 0 100vh; }
+        }
+        .content-wrapper {
+            position: relative;
+            z-index: 2;
+        }
+        .glitch-text {
+            position: relative;
+            color: #0f0;
+            font-weight: 900;
+            text-shadow: 0 0 5px #0f0, 0 0 10px #0f0;
+            animation: glitch-anim 3s infinite;
+        }
+        .light-theme .glitch-text {
+            color: #0000ff;
+            text-shadow: 0 0 5px #0000ff, 0 0 10px #0000ff;
+        }
+        .glitch-text::before,
+        .glitch-text::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            overflow: hidden;
+        }
+        .light-theme .glitch-text::before,
+        .light-theme .glitch-text::after {
+            background: #e6e6fa;
+        }
+        .glitch-text::before {
+            left: 3px;
+            text-shadow: -2px 0 #ff0000;
+            clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
+            animation: glitch-flicker 2s infinite;
+        }
+        .glitch-text::after {
+            left: -3px;
+            text-shadow: -2px 0 #0000ff, 2px 2px #ff0000;
+            clip-path: polygon(0 50%, 100% 50%, 100% 100%, 0 100%);
+            animation: glitch-flicker 3s infinite;
+        }
+        @keyframes glitch-anim {
+            1% { transform: rotateX(10deg) skewX(70deg); }
+            2% { transform: none; }
+        }
+        @keyframes glitch-flicker {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+        .btn-matrix {
+            border: 2px solid #0f0;
+            text-shadow: 0 0 5px #0f0;
+            transition: all 0.3s ease;
+        }
+        .light-theme .btn-matrix {
+            border: 2px solid #0000ff;
+            text-shadow: 0 0 5px #0000ff;
+        }
+        .btn-matrix:hover {
+            background: #ff0000;
+            color: #000;
+            box-shadow: 0 0 20px #ff0000;
+            text-shadow: none;
+        }
+        .lang-switcher button {
+            transition: all 0.3s ease;
+        }
+        .lang-switcher button:hover {
+            background-color: #ff0000;
+            transform: scale(1.05);
+        }
+        footer a:hover {
+            color: #ff0000;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body class="antialiased dark-theme">
+    <canvas id="matrix-canvas"></canvas>
+    <div class="scanline-overlay"></div>
+    <div class="content-wrapper min-h-screen flex flex-col items-center justify-center text-center p-6">
+        <div class="flex justify-between w-full max-w-md mb-4 lang-switcher">
+            <button onclick="changeLanguage('fa')" class="px-4 py-2 bg-blue-600 text-white rounded">فارسی</button>
+            <button onclick="changeLanguage('en')" class="px-4 py-2 bg-blue-600 text-white rounded">English</button>
+            <button onclick="changeLanguage('zh')" class="px-4 py-2 bg-blue-600 text-white rounded">中文</button>
+            <button onclick="toggleTheme()" class="px-4 py-2 bg-red-600 text-white rounded">Toggle Theme</button>
+        </div>
+        <h1 class="glitch-text text-8xl md:text-9xl tracking-widest" data-text="404">404</h1>
+        <h2 id="message" class="text-2xl md:text-4xl font-bold mt-4" style="text-shadow: 0 0 5px #0f0;">
+            اتصال از دست رفت...
+        </h2>
+        <p id="description" class="mt-4 text-lg md:text-xl text-green-400 max-w-md">
+            شما از ماتریکس خارج شده‌اید. مسیری که به دنبال آن بودید دیگر وجود ندارد یا شاید از ابتدا یک خطا در کد بوده است.
+        </p>
+        <a href="/" class="btn-matrix mt-8 px-8 py-3 font-bold rounded-lg transform hover:scale-105">
+            اتصال مجدد به سیستم
+        </a>
+    </div>
+    <footer class="text-center py-4 text-gray-400">
+        <p>Designed by <a href="https://github.com/HamidYaraliOfficial" class="text-blue-400 hover:text-red-400 transition">Hamid Yarali</a></p>
+        <p>Follow on <a href="https://www.instagram.com/hamidyaraliofficial?igsh=MWpxZjhhMHZuNnlpYQ==" class="text-blue-400 hover:text-red-400 transition">Instagram</a></p>
+    </footer>
+    <script>
+        const translations = {
+            fa: {
+                dir: 'rtl',
+                message: 'اتصال از دست رفت...',
+                description: 'شما از ماتریکس خارج شده‌اید. مسیری که به دنبال آن بودید دیگر وجود ندارد یا شاید از ابتدا یک خطا در کد بوده است.',
+                home: 'اتصال مجدد به سیستم'
+            },
+            en: {
+                dir: 'ltr',
+                message: 'Connection Lost...',
+                description: 'You have been disconnected from the Matrix. The path you sought no longer exists, or perhaps there was a glitch in the code from the start.',
+                home: 'Reconnect to System'
+            },
+            zh: {
+                dir: 'ltr',
+                message: '连接丢失...',
+                description: '您已从矩阵中断开连接。您寻找的路径不再存在，或者从一开始就存在代码错误。',
+                home: '重新连接系统'
+            }
+        };
+
+        function changeLanguage(lang) {
+            document.documentElement.lang = lang;
+            document.documentElement.dir = translations[lang].dir;
+            document.getElementById('message').textContent = translations[lang].message;
+            document.getElementById('description').textContent = translations[lang].description;
+            document.querySelector('a[href="/"]').textContent = translations[lang].home;
+        }
+
+        function toggleTheme() {
+            document.body.classList.toggle('light-theme');
+            document.body.classList.toggle('dark-theme');
+            const isLight = document.body.classList.contains('light-theme');
+            document.getElementById('message').style.textShadow = isLight ? '0 0 5px #0000ff' : '0 0 5px #0f0';
+            document.getElementById('description').className = isLight ? 'mt-4 text-lg md:text-xl text-blue-600 max-w-md' : 'mt-4 text-lg md:text-xl text-green-400 max-w-md';
+        }
+
+        const canvas = document.getElementById('matrix-canvas');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const katakana = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブヅプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッン';
+        const latin = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        const nums = '0123456789';
+        const alphabet = katakana + latin + nums;
+
+        const fontSize = 16;
+        const columns = canvas.width / fontSize;
+        const rainDrops = [];
+        for (let x = 0; x < columns; x++) {
+            rainDrops[x] = 1;
+        }
+
+        const mouse = { x: undefined, y: undefined, radius: 75 };
+
+        window.addEventListener('mousemove', (event) => {
+            mouse.x = event.x;
+            mouse.y = event.y;
+        });
+
+        window.addEventListener('mouseout', () => {
+            mouse.x = undefined;
+            mouse.y = undefined;
+        });
+
+        const draw = () => {
+            ctx.fillStyle = document.body.classList.contains('light-theme') ? 'rgba(230, 230, 250, 0.05)' : 'rgba(0, 0, 0, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = document.body.classList.contains('light-theme') ? '#0000ff' : '#0f0';
+            ctx.font = fontSize + 'px monospace';
+
+            for (let i = 0; i < rainDrops.length; i++) {
+                const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+                const x = i * fontSize;
+                const y = rainDrops[i] * fontSize;
+
+                let dx = mouse.x - x;
+                let dy = mouse.y - y;
+                let distance = Math.sqrt(dx * dx + dy * dy);
+
+                if (distance < mouse.radius) {
+                    rainDrops[i] -= 5;
+                }
+
+                ctx.fillText(text, x, y);
+
+                if (y > canvas.height && Math.random() > 0.975) {
+                    rainDrops[i] = 0;
+                }
+                rainDrops[i]++;
+            }
+        };
+
+        setInterval(draw, 30);
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            const newColumns = canvas.width / fontSize;
+            rainDrops.length = newColumns;
+            for (let x = columns; x < newColumns; x++) {
+                rainDrops[x] = 1;
+            }
+        });
+    </script>
+</body>
+</html>
